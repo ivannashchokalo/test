@@ -11,14 +11,12 @@ export const useFavoriteStore = create<FavoriteStore>()((set) => ({
     set((state) => {
       if (state.favorites.includes(value)) {
         console.log(value);
-        const filterd = state.favorites.filter((id) => id !== value);
+        const filtered = state.favorites.filter((id) => id !== value);
 
-        return { favorites: filterd };
+        return { favorites: filtered };
       } else {
-        state.favorites.push(value);
-
         return {
-          favorites: state.favorites,
+          favorites: [...state.favorites, value],
         };
       }
     });

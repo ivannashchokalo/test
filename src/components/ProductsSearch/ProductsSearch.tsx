@@ -12,5 +12,5 @@ export default function ProductsSearch({
     onSearch(e.target.value);
   };
 
-  return <input defaultValue={searchValue} onChange={handleSearch} />;
+  return <input value={searchValue} onChange={handleSearch} />;
 }
