@@ -25,30 +25,26 @@ function App() {
   }, [products, favorites, selectedValue]);
 
   useEffect(() => {
-    try {
-      setIsLoading(true);
+    const fetch = async () => {
+      try {
+        setIsLoading(true);
+        setIsError(false);
 
-      const fetchProducts = async () => {
-        const products = await getProducts();
-
-        setProducts(products.products);
-      };
-
-      const fetchProductsBySearch = async () => {
-        const products = await getProductsBySearch(searchValue);
-        setProducts(products.products);
-      };
-
-      if (searchValue) {
-        fetchProductsBySearch();
-      } else {
-        fetchProducts();
+        if (searchValue) {
+          const products = await getProductsBySearch(searchValue);
+          setProducts(products.products);
+        } else {
+          const products = await getProducts();
+          setProducts(products.products);
+        }
+      } catch {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
       }
-    } catch {
-      setIsError(true);
-    } finally {
-      setIsLoading(false);
-    }
+    };
+
+    fetch();
   }, [searchValue]);
 
   return (
@@ -57,8 +53,10 @@ function App() {
       {isError && <p>Error</p>}
       <Select value={selectedValue} onSelectChange={setSelectedValue} />
       <ProductsSearch searchValue={searchValue} onSearch={setSearchValue} />
-      {filteredProducts && filteredProducts.length > 0 && (
+      {filteredProducts && filteredProducts.length > 0 ? (
         <ProductsList products={filteredProducts} />
+      ) : (
+        <p>Not products</p>
       )}
     </>
   );

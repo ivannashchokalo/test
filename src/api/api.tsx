@@ -21,3 +21,11 @@ export const getProductsBySearch = async (searchValue: string) => {
   );
   return data;
 };
+
+export const getProductById = async (id: number) => {
+  const { data } = await axios.get<Product>(
+    `https://dummyjson.com/products/${id}`,
+  );
+  console.log(data);
+  return data;
+};
