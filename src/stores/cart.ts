@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import type { Product } from "../types/product";
+import type { Product } from "../types/products";
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
   quantity: number;
 }
 
@@ -45,8 +45,54 @@ export const useCartStore = create<CartStore>()((set) => ({
       return { products: updatedProducts };
     });
   },
-  removeFromCart: (id) => {},
-  increase: (id) => {},
-  decrease: (id) => {},
-  clearCart: () => {},
+  removeFromCart: (id) => {
+    set((state) => {
+      const filteredProducts = state.products.filter(
+        (product) => product.id !== id,
+      );
+
+      return {
+        products: filteredProducts,
+      };
+    });
+  },
+  increase: (id) => {
+    set((state) => {
+      const updatedProducts = state.products.map((product) => {
+        if (product.id === id) {
+          return {
+            ...product,
+            quantity: product.quantity + 1,
+          };
+        }
+        return product;
+      });
+
+      return { products: updatedProducts };
+    });
+  },
+  decrease: (id) => {
+    set((state) => {
+      const updatedProducts = state.products
+        .map((product) => {
+          if (product.id === id) {
+            return {
+              ...product,
+              quantity: product.quantity - 1,
+            };
+          }
+          return product;
+        })
+        .filter((product) => product.quantity > 0);
+
+      return { products: updatedProducts };
+    });
+  },
+  clearCart: () => {
+    set(() => {
+      return {
+        products: [],
+      };
+    });
+  },
 }));

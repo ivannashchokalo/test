@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { getProductById } from "../../api/api";
-import type { Product } from "../../types/product";
+import type { Product } from "../../types/products";
 
 interface ModalProps {
   onClose: (v: number | null) => void;

@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import ProductsList from "./components/ProductsList/ProductsList";
 import { getProducts, getProductsBySearch } from "./api/api";
-import type { Product } from "./types/product";
+import type { Product } from "./types/products";
 import ProductsSearch from "./components/ProductsSearch/ProductsSearch";
 import Select from "./components/Select/Select";
-import { useFavoriteStore } from "./stores/store";
+import { useFavoriteStore } from "./stores/favorites";
+import Header from "./components/Header/Header";
+import Cart from "./components/Cart/Cart";
+import Loading from "./components/Loading/Loading";
+import Error from "./components/Error/Error";
 
-type SelectedValueType = "all" | "favorites";
+export type SelectedValueType = "all" | "favorites";
 
 function App() {
   const [products, setProducts] = useState<Product[]>();
@@ -49,8 +53,9 @@ function App() {
 
   return (
     <>
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error</p>}
+      <Header />
+      {isLoading && <Loading />}
+      {isError && <Error />}
       <Select value={selectedValue} onSelectChange={setSelectedValue} />
       <ProductsSearch searchValue={searchValue} onSearch={setSearchValue} />
       {filteredProducts && filteredProducts.length > 0 ? (
@@ -58,6 +63,8 @@ function App() {
       ) : (
         <p>Not products</p>
       )}
+      <h2>Cart</h2>
+      <Cart />
     </>
   );
 }
